@@ -23,8 +23,10 @@ For at least 4 of my 5 test questions, the retrieved chunks include one that
 contains the answer.
 
 **Why this target:**
-<!-- e.g. "One of my questions is about a topic only two documents mention, so
-     I expect that one to be hard." -->
+4 of 5 and not 5 of 5 because one of my questions asks about an "accessible
+entrance" and the corpus never uses that phrase — `housing_aldridge_hall.txt`
+only says the elevator is out about a week per semester. I expect the wording
+gap to cost me that one.
 
 ---
 
@@ -33,8 +35,10 @@ contains the answer.
 Every answer the system produces names at least one source document.
 
 **Why this target:**
-<!-- Why all five and not four? What about your setup makes that achievable —
-     or what would have to go wrong for it not to be? -->
+All five, because anything the gate lets through already came back with a
+filename attached to it — the source is sitting right there in the retrieved
+chunk. If an answer comes out without one, the model ignored an instruction it
+was given, and that's a bug rather than a near miss.
 
 ---
 
@@ -50,8 +54,11 @@ in at least 4 of 5 tries.
      just keep five of them, or the "4 of 5" above has nothing to be 4 of. -->
 
 **Why this target:**
-<!-- What did your distances look like when you set the cutoff in Milestone 4?
-     Was there a clean gap, or did the two groups overlap? -->
+My two groups came out clean apart: in-corpus best distances 0.238–0.475, the
+five out-of-scope ones 0.787–0.923. Nothing overlapped, so a cutoff of 0.6 sits
+in open space. I still said 4 of 5 rather than 5 of 5 because the nearest
+out-of-scope question ("capital of Mongolia", 0.787) is the one an off-topic
+question worded more like campus admin could plausibly slip under.
 
 ---
 
@@ -69,9 +76,17 @@ in at least 4 of 5 tries.
        - "No chunk is shorter than 200 characters, since anything below that
           in my corpus turned out to be a heading with no content under it." -->
 
-
+All 5 chunks I sample name their subject in the first line and read as one
+complete thought, with no sentence cut in half at either end, and no chunk is
+shorter than 60 characters.
 
 **Why this target:**
+The starter's chunker produced a 2-character chunk on advice_threads, so the
+floor is there to catch that. The first-line rule is the one I actually care
+about: `housing_aldridge_hall.txt` covers build year, walk time, the elevator,
+laundry prices and noise rules in one post, and split on paragraphs the
+elevator line becomes "The bad: the elevator is out roughly one week per
+semester" — true, and useless, because it no longer says which building.
 
 
 
@@ -87,9 +102,17 @@ in at least 4 of 5 tries.
      present — anything, as long as it names a number or an observable
      outcome. -->
 
-
+For all 5 of my test questions, the file named in the answer is one that
+actually contains the fact stated — not just any file that came back from
+retrieval.
 
 **Why this target:**
+Criterion 2 only asks that a source gets named, which a system can satisfy
+while citing the wrong file. Retrieval hands the model 5 chunks and only one
+usually holds the answer — my meal plan question returns
+`admin_meal_plan_changes.txt` alongside four dining hall documents, and citing
+any of those four would look right at a glance. That's the failure I'd rather
+catch, so I'm checking the citation against the chunk, not just its presence.
 
 
 
