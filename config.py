@@ -20,7 +20,7 @@ load_dotenv(ROOT / ".env")
 # Change this to switch corpora, or pass --corpus on the command line.
 # Options are the folder names inside corpora/. See corpora/README.md.
 
-CORPUS = os.getenv("AI201_CORPUS", "advice_threads")
+CORPUS = os.getenv("AI201_CORPUS", "campus_life")
 
 
 # ─── Chunking (Milestone 3) ──────────────────────────────────────────────────
@@ -29,6 +29,17 @@ CORPUS = os.getenv("AI201_CORPUS", "advice_threads")
 
 CHUNK_SIZE = 800        # characters per chunk
 CHUNK_OVERLAP = 120     # characters shared between neighbouring chunks
+
+# one size per corpus. short posts and long guides want different numbers.
+CHUNK_SIZES = {
+    "advice_threads": 1000,   # longest thread 793, nothing gets cut
+    "campus_life": 600,       # longest post 549, nothing gets cut
+    "city_guides": 800,       # guides are 2000+, these get cut
+}
+
+
+def chunk_size_for(corpus: str | None = None) -> int:
+    return CHUNK_SIZES.get(corpus or CORPUS, CHUNK_SIZE)
 
 
 # ─── Retrieval (Milestone 4) ─────────────────────────────────────────────────
